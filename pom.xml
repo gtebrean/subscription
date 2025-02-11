@@ -31,7 +31,6 @@
 		<lombok.version>1.18.36</lombok.version>
 		<mysql.version>8.0.33</mysql.version>
 		<mapstruct.version>1.6.3</mapstruct.version>
-		<awssdk.version>2.30.15</awssdk.version>
 		<maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
 		<lmb.version>0.2.0</lmb.version>
 		<maven-dependency-plugin.version>3.8.1</maven-dependency-plugin.version>
