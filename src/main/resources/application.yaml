@@ -30,5 +30,7 @@ logging:
 
 insurance:
   url: "https://insurance.com/policy"
+  token:
+    url: "insurance.com/token"
 
 

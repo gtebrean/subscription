@@ -1,6 +1,6 @@
 package com.assignment.subscription.service;
 
-import com.assignment.subscription.exception.AwsTokenRefreshException;
+import com.assignment.subscription.exception.TokenRefreshException;
 import com.assignment.subscription.exception.ChronologicalDateException;
 import com.assignment.subscription.exception.InsuranceCreationException;
 import com.assignment.subscription.exception.UserNotFoundException;
@@ -38,7 +38,7 @@ public class SubscriptionService {
     private String insuranceUrl;
 
     private final SubscriptionRepository subscriptionRepository;
-    private final SecretsManagerService secretsManagerService;
+    private final TokenService tokenService;
     private final SubscriptionValidationService subscriptionValidation;
     private final SubscriptionMapper subscriptionMapper;
     private final UserRepository userRepository;
@@ -76,8 +76,8 @@ public class SubscriptionService {
 
         String apiToken;
         try {
-            apiToken = secretsManagerService.getApiToken();
-        } catch (AwsTokenRefreshException e) {
+            apiToken = tokenService.getApiToken();
+        } catch (TokenRefreshException e) {
             log.error("Failed to retrieve API token from AWS Secrets Manager: {}", e.getMessage(), e);
             return HttpStatus.SERVICE_UNAVAILABLE; // Return HTTP 503 (Service Unavailable)
         }

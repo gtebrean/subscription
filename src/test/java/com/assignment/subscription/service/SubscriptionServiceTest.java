@@ -1,6 +1,6 @@
 package com.assignment.subscription.service;
 
-import com.assignment.subscription.exception.AwsTokenRefreshException;
+import com.assignment.subscription.exception.TokenRefreshException;
 import com.assignment.subscription.exception.ChronologicalDateException;
 import com.assignment.subscription.exception.InsuranceCreationException;
 import com.assignment.subscription.exception.UserNotFoundException;
@@ -43,7 +43,7 @@ class SubscriptionServiceTest {
     @Mock
     private UserRepository userRepository;
     @Mock
-    private SecretsManagerService secretsManagerService;
+    private TokenService tokenService;
     @Mock
     private SubscriptionValidationService subscriptionValidation;
 
@@ -52,13 +52,13 @@ class SubscriptionServiceTest {
 
 
     @Test
-    void createSubscriptionSuccessfullyTest() throws UserNotFoundException, ChronologicalDateException, AwsTokenRefreshException, InsuranceCreationException {
+    void createSubscriptionSuccessfullyTest() throws UserNotFoundException, ChronologicalDateException, TokenRefreshException, InsuranceCreationException {
         var validSubscriptionDto = generateSubscriptionDto();
         var user = generateUser();
         // Arrange
         doNothing().when(subscriptionValidation).validateDates(validSubscriptionDto);
         when(userRepository.findById(any())).thenReturn(Optional.of(user));
-        when(secretsManagerService.getApiToken()).thenReturn(TOKEN);
+        when(tokenService.getApiToken()).thenReturn(TOKEN);
         when(subscriptionRepository.save(any(Subscription.class))).thenAnswer(invocation -> {
             Subscription subscription = invocation.getArgument(0);
             subscription.setId(1L);
@@ -99,13 +99,13 @@ class SubscriptionServiceTest {
     }
 
     @Test
-    void createSubscription_insuranceIssueFailsTest() throws  ChronologicalDateException, AwsTokenRefreshException {
+    void createSubscription_insuranceIssueFailsTest() throws  ChronologicalDateException, TokenRefreshException {
         var validSubscriptionDto = generateSubscriptionDto();
         var user = generateUser();
         // Arrange
         doNothing().when(subscriptionValidation).validateDates(validSubscriptionDto);
         when(userRepository.findById(any())).thenReturn(Optional.of(user));
-        when(secretsManagerService.getApiToken()).thenThrow(new AwsTokenRefreshException("Failed to refresh API token") );
+        when(tokenService.getApiToken()).thenThrow(new TokenRefreshException("Failed to refresh API token") );
 
         // Act
         assertThrowsExactly(InsuranceCreationException.class, () -> test.createSubscription(validSubscriptionDto));
