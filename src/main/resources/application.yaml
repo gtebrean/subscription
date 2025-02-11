@@ -29,7 +29,7 @@ logging:
           HikariConfig: DEBUG
 
 insurance:
-  url: "https://insurance.com/policy"
+  url: "insurance.com/policy"
   token:
     url: "insurance.com/token"
 
