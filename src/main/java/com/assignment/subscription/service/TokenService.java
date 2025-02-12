@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -44,11 +43,7 @@ public class TokenService {
         }
         return (cachedToken != null) ? cachedToken.token() : null;
     }
-
-    /**
-     * Refreshes the token by fetching it from AWS Secrets Manager and checking expiration.
-     */
-    @Scheduled(fixedRate = TOKEN_REFRESH_INTERVAL * 1000) // Run every 11 months
+    
     public synchronized void refreshApiToken() throws TokenRefreshException {
         try {
             log.info("Attempting to refresh API token...");
